@@ -7,12 +7,20 @@
   
     let value = ''
     let content = {'results':[]}
+
+    let loaderClass = "hide-loader";
   
     async function search() {
       
+      loaderClass = "loader";
+
+      // clearing content
+      content = {'results':[]};
+
       content = await invoke('retreive_Search', { value })
       searchContent.set(content.results);
 
+      loaderClass = "hide-loader";
 
     }
   </script>
@@ -23,7 +31,9 @@
     <input  placeholder="Enter a podcast to search" bind:value={value}/>
     <button on:click="{search}">Submit</button>
 
-    
+    <div class={loaderClass}>
+
+    </div>
     
     <div id="content"> 
 
@@ -45,9 +55,44 @@
 
   <style>
 
+.hide-loader {
+
+display: none;
+}
+.loader {
+width: 150px;
+aspect-ratio: 1;
+display: grid;
+border: 4px solid #0000;
+border-radius: 50%;
+border-right-color: #25b09b;
+animation: l15 1s infinite linear;
+
+place-self: center;
+
+
+}
+.loader::before,
+.loader::after {    
+content: "";
+grid-area: 1/1;
+margin: 2px;
+border: inherit;
+border-radius: 50%;
+animation: l15 2s infinite;
+}
+.loader::after {
+margin: 8px;
+animation-duration: 3s;
+}
+@keyframes l15{ 
+100%{transform: rotate(1turn)}
+}
+
 .area {
 
     margin:20px;
+    
 }
 
 #content{

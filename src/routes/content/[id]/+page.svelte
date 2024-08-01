@@ -94,7 +94,7 @@ onMount(() => {
         <div class="title-options">
             <h1> {podTitle}</h1>
             {#if podDescription != ""}
-                 <p> {podDescription}</p>
+                 <p class="content-desc"> {podDescription}</p>
             {/if}
             <button> Add Podcast </button>
         </div>
@@ -107,11 +107,11 @@ onMount(() => {
     <div class={loaderClass}></div>
    
     
-    <div id="content">
+    <div id="content-v2">
         {#each content.item as podItem, index}
-        <div class="cap-item">
+        <div class="content-card">
 
-            <img class='cap-img' src={podImage}/>
+            <img  src={podImage} width="300px" height="300px"/>
 
             <!----
             undecided about if I should jsut use podImage
@@ -124,13 +124,29 @@ onMount(() => {
 
             {/if}-->
            
-            
+            <div class="title-options"> 
             {#if typeof(podItem.title) == 'string'}
             <h3> {podItem.title}</h3>
 
             {:else}
                 <h3> {podItem.title["#cdata"]}</h3>
+            {/if} 
+
+            {#if typeof(podItem.description) == 'string'}
+                <p class="content-desc"> {podItem.description}</p>
+            {:else}
+                <p class="content-desc"> {podItem.description["#cdata"]}</p>
             {/if}
+
+            {#if podItem.hasOwnProperty("enclosure")}
+
+                <audio controls src={podItem.enclosure["@url"]} preload="none"></audio>
+           
+            {:else}
+                <p> Check rss feed</p>
+            {/if}
+        
+            </div> 
             
 
         </div>
@@ -164,6 +180,7 @@ onMount(() => {
     .title-content{
 
         margin: 10px;
+        margin-bottom: 20px;
         display: grid;
         grid-template-columns: 300px 600px;
         
@@ -184,6 +201,8 @@ onMount(() => {
     .title-options p {
 
         font-size: 1.1em;
+        
+        
     }
 
 .hide-loader {
@@ -227,11 +246,59 @@ onMount(() => {
     }
 
     #content{
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
-margin-left:5%;
-margin-bottom:2.5%;
-}
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
+    margin-left:5%;
+    margin-bottom:2.5%;
+    }
+
+    
+
+    #content-v2{
+
+        display: grid;
+   
+        margin-left:5%;
+        margin-bottom:2.5%;
+       
+    }
+
+    .content-desc {
+
+        font-size: 1.1em;
+        width:50vw;
+        height:20vh;
+        text-wrap:balance;
+        overflow:hidden;
+        
+    }
+
+    .content-card{
+
+    margin: 10px;
+    display: grid;
+    grid-template-columns: 300px 0.7fr;
+    padding:10px;
+    
+    border: 0.5px inset;
+    border-left:0;
+    border-bottom: 0;
+    border-right: 0;
+    
+    border-image-slice: 1;
+
+
+    border-image-source: linear-gradient(
+        to right, #e0e0e0, #3f3d3d, #2d2b2b);
+    
+
+    
+    }
+    
+
+    
+    
 .cap-item{
 padding-top:20px;
 border-bottom: 2.5px solid black;
