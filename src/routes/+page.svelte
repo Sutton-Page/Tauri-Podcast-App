@@ -2,7 +2,31 @@
     import { invoke } from '@tauri-apps/api/tauri'
     import {searchContent} from '../store.js';
 
+    import Database from "tauri-plugin-sql-api";
+    import {onMount} from 'svelte';
+
+    let db;
+
+    let savedPodcasts = [];
+
+    let db_path = "sqlite:data.db";
+
     
+    onMount(() => {
+
+        loadData();
+    });
+
+    async function loadData(){
+
+        db = await Database.load(db_path);
+        
+        const result = await db.select("SELECT * from podcast");
+
+        savedPodcasts = result;
+
+        
+    }
 
   
     let value = ''
@@ -25,35 +49,43 @@
     }
   </script>
 
-  
+
   
   <div class="area">
-    <input  placeholder="Enter a podcast to search" bind:value={value}/>
-    <button on:click="{search}">Submit</button>
+    
+    <h2 style="text-align:center"> Saved Podcasts </h2>
+    <div class="saved">
 
-    <div class={loaderClass}>
+      
+      {#if savedPodcasts.length > 0}
+
+      
+
+        {#each savedPodcasts as pod}
+          <div>
+            <a href={`/saved/${pod.id}`}>
+            <img  src={pod.image} width="350px" height="350px"/>
+            </a>
+          </div>
+        {/each}
+      
+      {:else}
+          <div>
+            <h3> No saved podcasts click the button below to search for podcast to add</h3>
+            <button> Search </button>
+          </div>
+      {/if}
 
     </div>
     
-    <div id="content"> 
-
-        {#each content.results as item, index}
-        <div class="cap-item">
-            <a href={`/content/${index}`}>
-            <img class='cap-img' src={item.artworkUrl600}/>
-            <h2>{item.collectionName}</h2>
-            </a>
-        </div>
-        {/each}
-
-
-    </div>
 
   </div>
 
 
 
   <style>
+  
+  
 
 .hide-loader {
 
@@ -93,6 +125,12 @@ animation-duration: 3s;
 
     margin:20px;
     
+}
+
+.saved {
+
+   display:grid;
+   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 #content{

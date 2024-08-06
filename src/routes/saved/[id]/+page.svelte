@@ -1,125 +1,42 @@
 <script>
 import { page } from '$app/stores';
-import { type } from '@tauri-apps/api/os';
-import {searchContent} from '../../../store';
 import { invoke } from '@tauri-apps/api/tauri'
 import {onMount} from 'svelte';
 import Database from 'tauri-plugin-sql-api';
 
 let db = null;
 let db_path = "sqlite:data.db";
-let errorClass = "hide-loader"
-let podcastIsSaved = false;
-
 let pageIndex = parseInt($page.url.pathname.split('/')[2]);
 
-console.log($page.url.pathname.split('/'));
-
-let  content = {'item':[]};
-
-let podImage = $searchContent[pageIndex].artworkUrl600;
-let podTitle = $searchContent[pageIndex].collectionName
-
+let data = [];
+let content = {'item':[]};
 let podDescription = "";
+let podImage = "";
 
+// variables to handle errors and loading css
+let errorClass = "hide-loader"
 let loaderClass = "loader";
 let infoClass = "hide-loader";
 
 
-function checkImage(index){
+function addPodcast() {
 
-    if(content.item.length > 0){
-
-        let item = content.item[index];
-
-        if(item.hasOwnProperty('itunes:image')){
-
-            if(item['itunes:image'] != null){
-
-                return item['itunes:image']['@href'];
-            }
-            
-        } 
-
-        return podImage
-
-
-    }
+    
 }
 
-async function checkPodSaved(){
-
-    if(db != null){
-
-        await db.select("SELECT * from podcast where title = $1",[podTitle])
-            .then((value) => {
-                console.log("Saved check");
-                console.log(value);
-                if(value.length > 0){
-
-                    podcastIsSaved = true;
-                } 
-                
-            })
-            .catch(() => {
-                podcastIsSaved = false;
-            })
-    }
-}
-
-async function addPodcast(){
-
-    let item = $searchContent[pageIndex];
-
-    if(db != null){
-
-        if(!podcastIsSaved){
-            const query = "INSERT INTO podcast(title,image,feed) VALUES($1,$2,$3)";
-
-            const result = await db.execute(query,
-                [item.collectionName,item.artworkUrl600,item.feedUrl])
-            
-
-            infoClass =  "info-bar"
-
-            podcastIsSaved = true;
-        }
-        else{
-
-            const query = "DELETE FROM podcast WHERE id = $1";
-            
-            let result =await db.select("SELECT * FROM podcast where title = $1",[item.title])
-
-            if(result.length > 0){
-
-                const result = await db.execute(query,[result[0].id])
-            }
-        }
-
-    } else{
-
-        console.log("DB NOT INITALIZED ERROR CHECK PAGE");
-    }
-
-}
-
-async function loadContent(){
+async function loadContent() {
 
     db = await Database.load(db_path);
-    
-    let value = $searchContent;
 
-    let data = value[pageIndex];
+    const result = await db.select("SELECT * from podcast WHERE id = $1",[pageIndex]);
 
-    let url = data.feedUrl;
+    if(result.length > 0){
 
-    //content = await invoke('retreive_feed',{url})
+        data = result
+        podImage = data[0].image;
+        let url = data[0].feed;
 
-    //podDescription = content.description;
-
-    checkPodSaved()
-
-    await invoke('retreive_feed',{url})
+        await invoke('retreive_feed',{url})
         .then((value) => {
 
             content = value
@@ -141,63 +58,45 @@ async function loadContent(){
 
     
     
-    loaderClass = "hide-loader";
+        loaderClass = "hide-loader";
 
-    console.log(content);
-
-
+    }
 
 
-}
-
-function hideInfoBar(){
-
-    infoClass = "hide-loader"
 }
 
 
 onMount(() => {
 
-    loadContent();
+    loadContent()
+
 });
-
-
-
 
 </script>
 
 <div id="root">
 
     
-    <div class={infoClass}>
-        <span>Podcast: <em>{podTitle}</em> was saved successfully!</span>
-        <button on:click={hideInfoBar}>&times;</button>
-    </div>
+    {#if data.length > 0}
    
     <div class="title-content">
         
-        <img  src={podImage} width="300px" height="300px"/>
+        <img  src={data[0].image} width="300px" height="300px"/>
         
 
         <div class="title-options">
-            <h1> {podTitle}</h1>
+            <h1> {data[0].title}</h1>
             {#if podDescription != ""}
                  <p class="content-desc"> {podDescription}</p>
             {/if}
-
-            {#if podcastIsSaved}
-
-                <button on:click={addPodcast}> Remove Podcast </button>
-            {:else}
-
-                <button on:click={addPodcast}> Add Podcast </button>
-            {/if}
-
+            <button on:click={addPodcast}> Add Podcast </button>
         </div>
 
         
         
     </div>
+
+    {/if}
 
     
     <div class={errorClass}>
@@ -205,8 +104,7 @@ onMount(() => {
         <span class="message"> Unable to load RSS Feed. Try again later.</span>
     </div>
     <div class={loaderClass}></div>
-   
-    
+
     <div id="content-v2">
         {#each content.item as podItem, index}
         <div class="content-card">
@@ -252,17 +150,10 @@ onMount(() => {
         </div>
         {/each}
     </div>
-
-
-
-    
-
    
     
-
-    
-    
 </div>
+
 
 <style>
 
@@ -453,6 +344,7 @@ height:80%;
     margin-right: 10px;
     font-size: 20px;
 }
+
 
 
 </style>

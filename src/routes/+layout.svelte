@@ -5,7 +5,7 @@
             <span class="icon home-icon"></span>
             Home
         </a>
-        <a href="/" class="nav-link">
+        <a href="/search" class="nav-link">
             <span class="icon search-icon"></span>
             Search
         </a>
