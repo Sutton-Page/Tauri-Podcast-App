@@ -8,13 +8,32 @@
     let db;
 
     let savedPodcasts = [];
-
     let db_path = "sqlite:data.db";
+
+   
+
+    let contextId = "";
+
+  async function removePod(id){
+
+      if(db != null){
+
+          let query = "DELETE FROM podcast where id = $1";
+          let result = await db.execute(query,[id]);
+
+          let getAll = "select * from podcast";
+          let request = await db.select(getAll)
+
+          savedPodcasts = request;
+      }
+  }
 
     
     onMount(() => {
 
         loadData();
+        
+        
     });
 
     async function loadData(){
@@ -53,7 +72,7 @@
   
   <div class="area">
     
-    <h2 style="text-align:center"> Saved Podcasts </h2>
+    <h1 style="text-align:center"> Saved Podcasts </h1>
     <div class="saved">
 
       
@@ -61,16 +80,26 @@
 
       
 
+
         {#each savedPodcasts as pod}
-          <div>
-            <a href={`/saved/${pod.id}`}>
+
+          <div class="pod-card">
+            
+              <button class="pod-card-but" on:click={removePod(pod.id)}>
+                <svg class="trash-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M3 6h18v2H3V6zm2 4h14v12H5V10zm3-8h8l1 1H7l1-1zM9 12v8h2v-8H9zm4 0v8h2v-8h-2z"/>
+                </svg>
+              </button>
+            
+            <a href={`/saved/${pod.id}`} >
             <img  src={pod.image} width="350px" height="350px"/>
             </a>
+            
           </div>
         {/each}
       
       {:else}
-          <div>
+          <div class="no-saved-pod">
             <h3> No saved podcasts click the button below to search for podcast to add</h3>
             <button> Search </button>
           </div>
@@ -84,7 +113,37 @@
 
 
   <style>
-  
+
+.no-saved-pod{
+
+  text-align: center;
+
+}
+
+.pod-card {
+            
+  position: relative;
+  margin:10px;
+            
+}
+
+.trash-icon {
+            width: 30px;
+            height: 30px;
+            fill: rgb(18, 19, 19);
+        }
+
+.pod-card-but {
+  position: absolute;
+            top: 0px;
+            right: 0px;  
+            background:lightgray;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #0f0e0e;
+            transition: color 0.3s;
+        }
   
 
 .hide-loader {
@@ -131,6 +190,7 @@ animation-duration: 3s;
 
    display:grid;
    grid-template-columns: 1fr 1fr 1fr 1fr;
+   margin-bottom: 10px;
 }
 
 #content{
@@ -148,6 +208,39 @@ border-bottom: 2.5px solid black;
 width: 70%;
 height:70%;
 }
+
+.context-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #333; /* Dark background for context menu */
+    border: 1px solid #555; /* Dark border */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Darker shadow */
+    display: none;
+    z-index: 1000;
+  }
+
+  .context-menu.visible {
+    display: block;
+  }
+
+  .context-menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #e0e0e0; /* Light text for items */
+  }
+
+  .context-menu-item:hover {
+    background: #444; /* Slightly lighter background on hover */
+  }
+
+  .context-menu-item .icon {
+    margin-right: 8px;
+  }
+
+
   </style>
 
 
