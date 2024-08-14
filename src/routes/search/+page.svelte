@@ -2,6 +2,11 @@
       import { invoke } from '@tauri-apps/api/tauri'
       import {searchContent} from '../../store.js';
       import {searchTerm} from '../../store.js';
+      import Database from "tauri-plugin-sql-api";
+      import {onMount} from 'svelte';
+
+      let db;
+      let db_path = "sqlite:data.db";
 
       
       //let content = {'results':[]}
@@ -31,6 +36,19 @@
         loaderClass = "hide-loader";
 
     }
+
+    
+
+    async function loadData(){
+
+            db = await Database.load(db_path);
+
+            
+    }
+
+    onMount(() => {
+        loadData();
+    });
 
 </script>
 
@@ -63,6 +81,9 @@
             <img class='cap-img' src={item.artworkUrl600}/>
             <!---<h2>{item.collectionName}</h2> -->
             </a>
+
+            <button class="remove-button">+</button>
+
         </div>
         {/each}
 
@@ -72,6 +93,28 @@
 
 
 <style>
+
+    /* Remove Button */
+.remove-button {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    background-color: rgb(33, 66, 33);
+    border: none;
+    color: white;
+    font-size: 18px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7); /* Stronger shadow for the button */
+}
+
+.remove-button:hover {
+    background-color: green;
+}
+
+
     .area {
 
     margin:20px;
