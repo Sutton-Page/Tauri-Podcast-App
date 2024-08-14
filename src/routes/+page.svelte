@@ -121,8 +121,8 @@
     border: none;
     color: white;
     font-size: 18px;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7); /* Stronger shadow for the button */
