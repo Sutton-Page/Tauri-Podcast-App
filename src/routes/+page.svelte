@@ -164,24 +164,6 @@
             
 }
 
-.trash-icon {
-            width: 30px;
-            height: 30px;
-            fill: rgb(18, 19, 19);
-        }
-
-.pod-card-but {
-  position: absolute;
-            top: 0px;
-            right: 0px;  
-            background:lightgray;
-            border: none;
-            cursor: pointer;
-            font-size: 24px;
-            color: #0f0e0e;
-            transition: color 0.3s;
-        }
-  
 
 .hide-loader {
 

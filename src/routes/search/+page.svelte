@@ -61,7 +61,7 @@
         <div class="cap-item">
             <a href={`/content/${index}`}>
             <img class='cap-img' src={item.artworkUrl600}/>
-            <h2>{item.collectionName}</h2>
+            <!---<h2>{item.collectionName}</h2> -->
             </a>
         </div>
         {/each}
@@ -83,23 +83,38 @@
     .search-header{
 
         place-self: center;
-        margin-bottom: 10px;
+        margin-top:20px;
+        margin-bottom: 20px;
     }
 
     #content{
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
-margin-left:5%;
-margin-bottom:2.5%;
-}
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 50px; 
+
+    }
+
+ .cap-item:hover{
+    transform: scale(1.05);
+ }
 .cap-item{
-padding-top:20px;
-border-bottom: 2.5px solid black;
+    position: relative;
+    background-color: #333; /* Dark gray for card background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(37, 35, 35, 0.5); /* Stronger shadow for depth */
+    text-align: center;
+    transition: transform 0.3s ease;
+    overflow: hidden; /* Ensure no overflow */
+    max-width: 350px;
+    max-height: 350px;
+    
 }
 .cap-img{
 
-width: 70%;
-height:70%;
+    max-width: 350px;
+    max-height: 350px;
 }
 
 .hide-loader {
