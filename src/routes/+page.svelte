@@ -85,14 +85,13 @@
 
           <div class="pod-card">
             
-              <button class="pod-card-but" on:click={removePod(pod.id)}>
-                <svg class="trash-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M3 6h18v2H3V6zm2 4h14v12H5V10zm3-8h8l1 1H7l1-1zM9 12v8h2v-8H9zm4 0v8h2v-8h-2z"/>
-                </svg>
+              <button class="remove-button" on:click={removePod(pod.id)}>
+                x
+                
               </button>
             
             <a href={`/saved/${pod.id}`} >
-            <img  src={pod.image} width="350px" height="350px"/>
+            <img  src={pod.image} width="350px" height="350px" class="podcast-cover"/>
             </a>
             
           </div>
@@ -113,6 +112,37 @@
 
 
   <style>
+  
+  .remove-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff4d4d;
+    border: none;
+    color: white;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7); /* Stronger shadow for the button */
+}
+
+.remove-button:hover {
+    background-color: #ff1a1a;
+}
+
+.pod-card:hover {
+    transform: scale(1.05);
+}
+
+.podcast-cover {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow for cover */
+    height: 100%; /* Image takes up the full height of the card */
+}
 
 .no-saved-pod{
 
@@ -123,7 +153,14 @@
 .pod-card {
             
   position: relative;
-  margin:10px;
+    background-color: #333; /* Dark gray for card background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(37, 35, 35, 0.5); /* Stronger shadow for depth */
+    text-align: center;
+    transition: transform 0.3s ease;
+    overflow: hidden; /* Ensure no overflow */
+    max-width: 350px;
+    max-height: 350px;
             
 }
 
@@ -188,9 +225,13 @@ animation-duration: 3s;
 
 .saved {
 
-   display:grid;
-   grid-template-columns: 1fr 1fr 1fr 1fr;
-   margin-bottom: 10px;
+  display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 50px; 
+
+    
 }
 
 #content{
