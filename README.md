@@ -6,4 +6,10 @@ To keep it simple I decided to create an application for searching for, listenin
 Frontend was created using Svelte framework while the backends for the project is written in Rust.\
 https://svelte.dev/
 
+## Installing Project
+
+Clone this Git Repository and then navigate the folder and then run 'npm run dev' from the commandline. Next run 'npm run tauri dev' from the commandline to start the application.
+
+## Project Screenshots
+
 
