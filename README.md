@@ -12,7 +12,7 @@ Clone this Git Repository and then navigate to the main folder and then run 'npm
 
 ## Project Screenshots
 ### Home Page
-![](./screenshot/home-page.PNG)
+![](./screenshots/home-page.PNG)
 ### Search Page
 ![](./screenshots/search-page.PNG)
 ### Podcast Page
