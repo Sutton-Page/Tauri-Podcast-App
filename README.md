@@ -12,8 +12,8 @@ Clone this Git Repository and then navigate to the main folder and then run 'npm
 
 ## Project Screenshots
 Home Page
-!(./screenshot/home-page.PNG)
+![](./screenshot/home-page.PNG)
 Search Page
-!(./screenshots/search-page.PNG)
+![](./screenshots/search-page.PNG)
 Podcast Page
-!(./screenshots/podcast-page.PNG)
+![](./screenshots/podcast-page.PNG)
