@@ -11,9 +11,9 @@ https://svelte.dev/
 Clone this Git Repository and then navigate to the main folder and then run 'npm run dev' from the commandline. Next run 'npm run tauri dev' from the commandline to start the application.
 
 ## Project Screenshots
-Home Page
+### Home Page
 ![](./screenshot/home-page.PNG)
-Search Page
+### Search Page
 ![](./screenshots/search-page.PNG)
-Podcast Page
+### Podcast Page
 ![](./screenshots/podcast-page.PNG)
