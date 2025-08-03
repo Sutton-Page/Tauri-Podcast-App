@@ -100,7 +100,7 @@
       {:else}
           <div class="no-saved-pod">
             <h3> No saved podcasts click the button below to search for podcast to add</h3>
-            <button> Search </button>
+            <a href='/search'> Search </a>
           </div>
       {/if}
 
